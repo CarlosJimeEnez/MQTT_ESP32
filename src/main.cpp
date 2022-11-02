@@ -7,7 +7,6 @@
 #define LED 18 
 bool led_status = false;
 
-
 WiFiClient espClient; 
 PubSubClient client(espClient); 
 
@@ -60,6 +59,7 @@ void setup() {
 
   pinMode(LED, OUTPUT);
   attachInterrupt(digitalPinToInterrupt(23), interrupt, RISING); 
+
   // -------------------- publish and subscribe
   client.publish(topic, "Holas desde la ESP");
   client.subscribe(topic);
