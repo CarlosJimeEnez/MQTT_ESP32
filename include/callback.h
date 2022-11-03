@@ -25,15 +25,7 @@ void callback(char *topic, byte *payload, unsigned int length){
     
     Serial.println(payload_int);
     Serial.println("-----------------------");
-    switch (expression)
-    {
-    case /* constant-expression */:
-        /* code */
-        break;
     
-    default:
-        break;
-    }
 }
 
 
