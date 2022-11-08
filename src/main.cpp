@@ -1,27 +1,29 @@
 #include <Arduino.h>
+
+//WIFI:
 #include <WiFi.h>
 #include <PubSubClient.h>
+
+//Functions:
 #include <Setup_functions.h>
-#include <vector>
 #include <callback.h>
 
+//Tipos de datos: 
+#include <vector>
 
 #define LED_BUILTIN 1
 #define LED 18 
 
 WiFiClient espClient; 
 PubSubClient client(espClient);
-Motor mot1(12, 13, "esp32/mot1"); 
-Motor mot2(4, 5, "esp32/mot2"); 
-
 
 //-------- Wifi variables ------ //
-// const char *ssid = "RS_NETWORK_1_2.4G"; 
-// const char *password = "rsautomation2017"; 
-//const char *ssid = "BUAP_Estudiantes"; 
-//const char *password = "f85ac21de4"; 
-const char *ssid = "MEGACABLE-979F"; 
-const char *password = "8eAYgaeY"; 
+//const char *ssid = "RS_NETWORK_1_2.4G"; 
+//const char *password = "rsautomation2017"; 
+const char *ssid = "BUAP_Estudiantes"; 
+const char *password = "f85ac21de4"; 
+//const char *ssid = "MEGACABLE-979F"; 
+//const char *password = "8eAYgaeY"; 
 
 // ------------------- mqtt Broker: 
 const char *mqtt_broker = "broker.emqx.io";
@@ -35,6 +37,7 @@ const int mqtt_port = 1883;
 
 void setup() {
     Serial.begin(115200);
+
 //// --------------- CONEXIONES RED ------------  ////
     conexion_wifi(ssid, password);
 
@@ -53,7 +56,7 @@ void setup() {
         }
     }
 
-// -------------------- publish and subscribe --- //
+// -------------------- subscribe --------------------- //
     client.publish(topics[0], "Holas desde la ESP");
     for(auto topic: topics){
         Serial.println(topic); 
