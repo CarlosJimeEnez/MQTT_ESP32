@@ -7,20 +7,20 @@ class Motor
 private:
     int IN1 = 0;  
     int IN2 = 0; 
-    char *topic; 
+    String topic;  
     int channel = 0; 
     const int freq = 450; 
     const int resolution = 8;
 
 public:
-    Motor(int, int, char*);
+    Motor(int, int, String);
     void setup();
-    void get_topic();
     void move_cw(float); 
     void move_ccw(float);    
+    String get_topic();
 };
 
-Motor::Motor(int IN1, int IN2, char* topic)
+Motor::Motor(int IN1, int IN2, String topic)
 {
     this->IN1 = IN1; 
     this->IN2 = IN2;  
@@ -43,8 +43,8 @@ void Motor::move_ccw(float freq){
     ledcWriteTone(this->channel, freq); 
 }
 
-void Motor::get_topic(){
-    Serial.println(this->topic); 
+String Motor::get_topic(){
+    return this->topic; 
 };
 
 #endif
