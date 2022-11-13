@@ -8,8 +8,13 @@
 #include <Setup_functions.h>
 #include <callback.h>
 
+//Encoders: 
+#include <AS5600.h>
+#include <Encoder.h>
+
 //Tipos de datos: 
 #include <vector>
+#include <Wire.h>
 
 #define LED_BUILTIN 1
 #define LED 18 
@@ -17,13 +22,16 @@
 WiFiClient espClient; 
 PubSubClient client(espClient);
 
+// ------ Encoders ------ //
+Encoder encoder1(0,0,0); 
+
 //-------- Wifi variables ------ //
 //const char *ssid = "RS_NETWORK_1_2.4G"; 
 //const char *password = "rsautomation2017"; 
-const char *ssid = "BUAP_Estudiantes"; 
-const char *password = "f85ac21de4"; 
-//const char *ssid = "MEGACABLE-979F"; 
-//const char *password = "8eAYgaeY"; 
+//const char *ssid = "BUAP_Estudiantes"; 
+//const char *password = "f85ac21de4"; 
+const char *ssid = "MEGACABLE-979F"; 
+const char *password = "8eAYgaeY"; 
 
 // ------------------- mqtt Broker: 
 const char *mqtt_broker = "broker.emqx.io";
@@ -37,6 +45,9 @@ const int mqtt_port = 1883;
 
 void setup() {
     Serial.begin(115200);
+    Wire.begin(); 
+
+    encoder1.setupCero(); 
 
 //// --------------- CONEXIONES RED ------------  ////
     conexion_wifi(ssid, password);
@@ -67,4 +78,6 @@ void setup() {
 
 void loop() {
     client.loop();
+    encoder1.mapVal(); 
+    Serial.println(encoder1.SumDegTotal(360)); 
 }
