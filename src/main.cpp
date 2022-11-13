@@ -8,35 +8,38 @@
 #include <Setup_functions.h>
 #include <callback.h>
 
-//Encoders: 
-#include <AS5600.h>
-#include <Encoder.h>
+// //Encoders:
+// #include <AS5600.h>
+// #include <Encoder.h>
 
-//Tipos de datos: 
+//Tipos de datos:
 #include <vector>
-#include <Wire.h>
+//#include <Wire.h>
 
 #define LED_BUILTIN 1
-#define LED 18 
+#define LED 18
 
-WiFiClient espClient; 
+WiFiClient espClient;
 PubSubClient client(espClient);
+// Motor mot1(22, 23, 0, 1, "esp32/mot1"); 
+// Motor mot2(4, 5, 2, 3,"esp32/mot2"); 
+// Motor motores[2] = {mot1, mot2}; 
 
 // ------ Encoders ------ //
-Encoder encoder1(0,0,0); 
+//Encoder encoder1(0,0,0);
 
 //-------- Wifi variables ------ //
-//const char *ssid = "RS_NETWORK_1_2.4G"; 
-//const char *password = "rsautomation2017"; 
-//const char *ssid = "BUAP_Estudiantes"; 
-//const char *password = "f85ac21de4"; 
-const char *ssid = "MEGACABLE-979F"; 
-const char *password = "8eAYgaeY"; 
+//const char *ssid = "RS_NETWORK_1_2.4G";
+//const char *password = "rsautomation2017";
+//const char *ssid = "BUAP_Estudiantes";
+//const char *password = "f85ac21de4";
+const char *ssid = "MEGACABLE-979F";
+const char *password = "8eAYgaeY";
 
-// ------------------- mqtt Broker: 
+// ------------------- mqtt Broker:
 const char *mqtt_broker = "broker.emqx.io";
-// TOPICS: 
-std::vector<const char *> topics = {"esp32/mot1", "esp32/mot2", "esp32/mot3", "esp32/Begin"}; 
+// TOPICS:
+std::vector<const char *> topics = {"esp32/mot1", "esp32/mot2", "esp32/mot3", "esp32/Begin"};
 const char *mqtt_username = "emqx";
 const char *mqtt_password = "public";
 const int mqtt_port = 1883;
@@ -45,10 +48,13 @@ const int mqtt_port = 1883;
 
 void setup() {
     Serial.begin(115200);
-    Wire.begin(); 
-
-    encoder1.setupCero(); 
-
+    //Wire.begin();
+    //encoder1.setupCero();
+    for (size_t i = 0; i < 2; i++)
+    {
+        motores[i].setup(); 
+    }
+    
 //// --------------- CONEXIONES RED ------------  ////
     conexion_wifi(ssid, password);
 
@@ -67,10 +73,12 @@ void setup() {
         }
     }
 
-// -------------------- subscribe --------------------- //
+// -------------------- publish --------------------- //
     client.publish(topics[0], "Holas desde la ESP");
+
+// -------------------- subscribe --------------------- //
     for(auto topic: topics){
-        Serial.println(topic); 
+        Serial.println(topic);
         client.subscribe(topic);
     }
     client.subscribe("Begin");
@@ -78,6 +86,6 @@ void setup() {
 
 void loop() {
     client.loop();
-    encoder1.mapVal(); 
-    Serial.println(encoder1.SumDegTotal(360)); 
+    //encoder1.mapVal();
+    //Serial.println(encoder1.SumDegTotal(360));
 }

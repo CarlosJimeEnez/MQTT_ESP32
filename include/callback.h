@@ -3,11 +3,12 @@
 #include <Arduino.h>
 #include <Motor.h>
 
-Motor mot1(12, 13, "esp32/mot1"); 
-Motor mot2(4, 5, "esp32/mot2"); 
+Motor mot1(22, 23, 0, 1, "esp32/mot1"); 
+Motor mot2(4, 5, 2, 3,"esp32/mot2"); 
 Motor motores[2] = {mot1, mot2}; 
 int motor_setpoints[3] = {0,0,0}; 
 
+    
 /* ------------- Funcion de llegada de los valores -------------------------- */
 void callback(char *topic, byte *payload, unsigned int length){
     Serial.print("Message arrived in topic: ");
@@ -27,8 +28,10 @@ void callback(char *topic, byte *payload, unsigned int length){
         concatenacion = concatenacion + auxiliar; 
     }
     int payload_int = concatenacion.toInt(); 
-    
-    // -------- MATCH TOPICS ------ // 
+    Serial.println(payload_int);
+    Serial.println("-----------------------");
+
+    // ---------------------------------- MATCH TOPICS ------------------------------------------- // 
     for (size_t i = 0; i < 2; i++)
     {
         if (topic_string == motores[i].get_topic())
@@ -38,13 +41,13 @@ void callback(char *topic, byte *payload, unsigned int length){
         }
     }
 
-    // ---------- BEGIN -------- //
+    // --------------------------- BEGIN --------------------------------- //
     if(topic_string == "Begin"){
         Serial.println("BEGIN"); 
+        mot1.set_motor(1, 255); 
     }
     
-    Serial.println(payload_int);
-    Serial.println("-----------------------");
+    
 }
 
 
